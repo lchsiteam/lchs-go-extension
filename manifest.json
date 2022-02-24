@@ -1,0 +1,41 @@
+{
+    "manifest_version": 3,
+    "name": "LCHS Go (beta)",
+    "version": "1.0.0",
+    "default_locale": "en",
+    "description": "Extension version of betago.lciteam.club.",
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "action": {
+        "default_title": "LCHS Go (beta)",
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "24": "icons/icon24.png",
+            "32": "icons/icon32.png"
+        }
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://betago.lciteam.club/?extensionBackground*"],
+            "js": ["extractData.js"]
+        }
+    ],
+    "cross_origin_embedder_policy": {
+        "value": "require-corp"
+    },
+    "cross_origin_opener_policy": {
+        "value": "same-origin"
+    },
+    "homepage_url": "https://betago.lciteam.club",
+    "offline_enabled": true,
+    "permissions": [
+        "idle"
+    ]
+}
