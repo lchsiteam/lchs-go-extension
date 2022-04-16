@@ -16,7 +16,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://betago.lciteam.club/?extensionBackground*"],
+            "matches": ["https://betago.lciteam.club/?data"],
             "js": ["extractData.js"]
         }
     ],
