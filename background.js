@@ -1,13 +1,17 @@
-var settings = {};
+const readStorage = async (settingsJSON) => {
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.get([settingsJSON], function (value) {
+			if (value[settingsJSON] === undefined) {
+				value.settingsJSON = '{"setting":"settings","showExtraPeriods":false,"sixthEnabled":true,"zeroEnabled":true,"twentyFourHour":false,"showAMPM":false,"inlinePeriodDetails":true,"colorTheme":3,"grade":"GRADE_9","language":"ENGLISH"}';
+			}
 
-chrome.storage.local.get(['settingsJSON'], function(response) {
-	if(response.settingsJSON == undefined) {
-		// set default settings if undefined
-		response = {settingsJSON: '{"setting":"settings","showExtraPeriods":false,"sixthEnabled":true,"zeroEnabled":true,"twentyFourHour":false,"showAMPM":false,"inlinePeriodDetails":true,"colorTheme":3,"grade":"GRADE_9","language":"ENGLISH"}'}
-	}
-	console.log(response.settingsJSON);
-	console.log(JSON.parse(response.settingsJSON));
-	settings = JSON.parse(response.settingsJSON);
-});
+			resolve(value[settingsJSON]);
+		});
+	});
+};
 
-console.log(settings);
+async function getStorage() {
+	return await readStorage('settingsJSON');
+}
+
+getStorage().then(result => console.log(result));
