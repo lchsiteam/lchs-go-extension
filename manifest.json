@@ -16,13 +16,14 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://betago.lciteam.club/?data"],
+            "matches": ["http://127.0.0.1:5500/*"],
             "js": ["extractData.js"]
         }
     ],
-    "homepage_url": "https://betago.lciteam.club",
+    "homepage_url": "http://127.0.0.1:5500",
     "offline_enabled": true,
     "permissions": [
-        "idle"
+        "idle",
+        "storage"
     ]
 }
