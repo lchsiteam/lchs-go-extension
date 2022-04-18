@@ -30,10 +30,10 @@ var currentPeriod;
 var periodName;
 var timeLeft;
 
-var scheduleJSON;
-var languageJSON;
+var schedule;
+var language;
 var settings;
-var customNamesJSON;
+var customNames;
 
 Promise.all([
     fetch("https://betago.lciteam.club/schedule.json").then(response => response.json()),
@@ -41,10 +41,10 @@ Promise.all([
     getStorage("settingsJSON"),
     getStorage("customNamesJSON")
 ]).then(result => {
-    scheduleJSON = result[0];
-    languageJSON = result[1];
+    schedule = result[0];
+    language = result[1];
     settings = JSON.parse(result[2]);
-    customNamesJSON = JSON.parse(result[3]);
+    customNames = JSON.parse(result[3]);
 
     updateBadge();
 })
@@ -54,11 +54,11 @@ Promise.all([
 fetch("https://betago.lciteam.club/languages.json")
     .then(response => response.json())
     .then(data => {
-        languageJSON = data;
+        language = data;
         fetch("https://betago.lciteam.club/schedule.json")
             .then(response => response.json())
             .then(data => {
-                scheduleJSON = data;
+                schedule = data;
                 getStorage().then(result => {
                     settings = JSON.parse(result);
                     updateBadge();
@@ -126,10 +126,10 @@ function getSchedule(date) {
     var localJSON = [];
 
     // Check if an override exists
-    if (Object.keys(scheduleJSON.overrides.all).includes(date.format("MM/DD/YYYY"))) {
-        scheduleType = scheduleJSON.overrides.all[date.format("MM/DD/YYYY")];
-    } else if (Object.keys(scheduleJSON.overrides[settings.grade]).includes(date.format("MM/DD/YYYY"))) {
-        scheduleType = scheduleJSON.overrides[settings.grade][date.format("MM/DD/YYYY")];
+    if (Object.keys(schedule.overrides.all).includes(date.format("MM/DD/YYYY"))) {
+        scheduleType = schedule.overrides.all[date.format("MM/DD/YYYY")];
+    } else if (Object.keys(schedule.overrides[settings.grade]).includes(date.format("MM/DD/YYYY"))) {
+        scheduleType = schedule.overrides[settings.grade][date.format("MM/DD/YYYY")];
     } else { // Check if today is in a range
         if (inRange(date, "SUMMER_BREAK")) {
             scheduleType = "SUMMER_BREAK";
@@ -140,7 +140,7 @@ function getSchedule(date) {
         } else if (inRange(date, "FALL_BREAK")) {
             scheduleType = "FALL_BREAK";
         } else {
-            scheduleType = scheduleJSON.defaults[date.day()];
+            scheduleType = schedule.defaults[date.day()];
         }
         if (inRange(date, "BLOCK_SWITCH")) {
             if (scheduleType == "BLOCK_EVEN") { scheduleType = "BLOCK_ODD"; }
@@ -154,23 +154,23 @@ function getSchedule(date) {
         switch (settings.grade) {
             case "GRADE_7":
             case "GRADE_8":
-                Object.keys(scheduleJSON.gradeLevels.middleSchool[scheduleType]).forEach(
+                Object.keys(schedule.gradeLevels.middleSchool[scheduleType]).forEach(
                     (period) => {
                         if (previousEnd != undefined) {
                             localJSON.push({
                                 name: "PASSING_BEFORE," + period,
                                 start: previousEnd,
-                                end: scheduleJSON.gradeLevels.middleSchool[scheduleType][period][0],
+                                end: schedule.gradeLevels.middleSchool[scheduleType][period][0],
                                 passing: true,
                             });
                         }
                         localJSON.push({
                             name: period,
-                            start: scheduleJSON.gradeLevels.middleSchool[scheduleType][period][0],
-                            end: scheduleJSON.gradeLevels.middleSchool[scheduleType][period][1],
+                            start: schedule.gradeLevels.middleSchool[scheduleType][period][0],
+                            end: schedule.gradeLevels.middleSchool[scheduleType][period][1],
                             passing: false,
                         });
-                        previousEnd = scheduleJSON.gradeLevels.middleSchool[scheduleType][period][1];
+                        previousEnd = schedule.gradeLevels.middleSchool[scheduleType][period][1];
                     }
                 );
                 break;
@@ -178,24 +178,24 @@ function getSchedule(date) {
             case "GRADE_10":
             case "GRADE_11":
             case "GRADE_12":
-                Object.keys(scheduleJSON.gradeLevels.highSchool[scheduleType]).forEach(
+                Object.keys(schedule.gradeLevels.highSchool[scheduleType]).forEach(
                     (period) => {
                         if (previousEnd != undefined) {
                             localJSON.push({
                                 name: "PASSING_BEFORE," + period,
                                 start: previousEnd,
-                                end: scheduleJSON.gradeLevels.highSchool[scheduleType][period][0],
+                                end: schedule.gradeLevels.highSchool[scheduleType][period][0],
                                 passing: true,
                             });
                         }
                         localJSON.push({
                             name: period,
-                            start: scheduleJSON.gradeLevels.highSchool[scheduleType][period][0],
-                            end: scheduleJSON.gradeLevels.highSchool[scheduleType][period][1],
+                            start: schedule.gradeLevels.highSchool[scheduleType][period][0],
+                            end: schedule.gradeLevels.highSchool[scheduleType][period][1],
                             passing: false,
                         });
                         previousEnd =
-                            scheduleJSON.gradeLevels.highSchool[scheduleType][period][1];
+                            schedule.gradeLevels.highSchool[scheduleType][period][1];
                     }
                 );
                 break;
@@ -238,7 +238,7 @@ function getSchedule(date) {
 
 // Function - Check if a date is in a date from the schedule.json
 function inRange(date, range) {
-    return date.startOf().add(1, 'hour').isBetween(dayjs(scheduleJSON.dateRanges[range][0], "MM/DD/YYYY").startOf('day'), dayjs(scheduleJSON.dateRanges[range][1], "MM/DD/YYYY").endOf('day'));
+    return date.startOf().add(1, 'hour').isBetween(dayjs(schedule.dateRanges[range][0], "MM/DD/YYYY").startOf('day'), dayjs(schedule.dateRanges[range][1], "MM/DD/YYYY").endOf('day'));
 }
 
 function getEvent(date) {
@@ -249,13 +249,13 @@ function getEvent(date) {
 }
 
 function translate(translateText) {
-    if (customNamesJSON[translateText] != null) {
-        return customNamesJSON[translateText];
+    if (customNames[translateText] != null) {
+        return customNames[translateText];
     } else {
-        if (languageJSON[translateText] == null) {
+        if (language[translateText] == null) {
             return translateText;
         } else {
-            return languageJSON[translateText];
+            return language[translateText];
         }
     }
 }
