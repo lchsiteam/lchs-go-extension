@@ -8,14 +8,18 @@ dayjs.extend(dayjs_plugin_advancedFormat);
 dayjs.extend(dayjs_plugin_customParseFormat);
 
 
-const readStorage = async (settingsJSON) => {
+const readStorage = async (key) => {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get([settingsJSON], function (value) {
-            if (value[settingsJSON] === undefined) {
-                value.settingsJSON = '{"setting":"settings","showExtraPeriods":false,"sixthEnabled":true,"zeroEnabled":true,"twentyFourHour":false,"showAMPM":false,"inlinePeriodDetails":true,"colorTheme":3,"grade":"GRADE_9","language":"ENGLISH"}';
+        chrome.storage.local.get([key], function (value) {
+            if (value[key] === undefined) {
+                if(key == "settingsJSON") {
+                    value[key] = '{"setting":"settings","showExtraPeriods":false,"sixthEnabled":true,"zeroEnabled":true,"twentyFourHour":false,"showAMPM":false,"inlinePeriodDetails":true,"colorTheme":3,"grade":"GRADE_9","language":"ENGLISH"}';
+                } else if(key == "customNamesJSON") {
+                    value[key] = '{}';
+                }
             }
 
-            resolve(value[settingsJSON]);
+            resolve(value[key]);
         });
     });
 };
@@ -36,8 +40,8 @@ var settings;
 var customNames;
 
 Promise.all([
-    fetch("https://betago.lciteam.club/schedule.json").then(response => response.json()),
-    fetch("https://betago.lciteam.club/languages.json").then(response => response.json()),
+    fetch("http://127.0.0.1:5500/schedule.json").then(response => response.json()),
+    fetch("http://127.0.0.1:5500/languages.json").then(response => response.json()),
     getStorage("settingsJSON"),
     getStorage("customNamesJSON")
 ]).then(result => {
@@ -50,24 +54,6 @@ Promise.all([
 })
 
 
-/*
-fetch("https://betago.lciteam.club/languages.json")
-    .then(response => response.json())
-    .then(data => {
-        language = data;
-        fetch("https://betago.lciteam.club/schedule.json")
-            .then(response => response.json())
-            .then(data => {
-                schedule = data;
-                getStorage().then(result => {
-                    settings = JSON.parse(result);
-                    updateBadge();
-                });
-            });
-});
-*/
-
-
 function updateBadge() {
     getSchedule(dayjs()).forEach((p) => {
         if (isCurrent(p)) {
@@ -76,13 +62,14 @@ function updateBadge() {
     });
 
     console.log(currentPeriod);
+
     if (currentPeriod.passing) {
         let tmp = currentPeriod.name.split(",");
         periodName = translateWithInsert(tmp[0], tmp[1]);
     } else {
         periodName = translate(currentPeriod.name);
     }
-    timeLeft = currentPeriod.end.diff(dayjs(), "minutes") + 1;
+    timeLeft = dayjs(currentPeriod.end, "HH:mm A").diff(dayjs(), "minutes") + 1;
 
     let remainingHours = Math.floor(timeLeft / 60);
     // let remainingMinutes = timeLeft - (remainingHours * 60);
@@ -117,7 +104,7 @@ function updateBadge() {
 }
 
 function isCurrent(period) {
-    return dayjs().isBetween(period.start, period.end);
+  return dayjs().isBetween(dayjs(period.start, "HH:mm A"), dayjs(period.end, "HH:mm A"));
 }
 
 function getSchedule(date) {
