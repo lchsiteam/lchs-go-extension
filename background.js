@@ -3,7 +3,6 @@ import "https://unpkg.com/dayjs@1.10.8/plugin/isBetween.js";
 import "https://unpkg.com/dayjs@1.10.8/plugin/advancedFormat.js";
 import "https://unpkg.com/dayjs@1.10.8/plugin/customParseFormat.js";
 
-
 dayjs.extend(dayjs_plugin_isBetween);
 dayjs.extend(dayjs_plugin_advancedFormat);
 dayjs.extend(dayjs_plugin_customParseFormat);
@@ -25,7 +24,6 @@ async function getStorage() {
     return await readStorage('settingsJSON');
 }
 
-getStorage().then(result => console.log(result));
 
 var scheduleJSON = {
     "version": 24.6,
@@ -224,26 +222,63 @@ var currentPeriod;
 var periodName;
 var timeLeft;
 
-getSchedule(dayjs()).forEach((p) => {
-    if (isCurrent(p)) {
-        currentPeriod = p;
-    }
+var settings;
+
+getStorage().then(result => {
+    settings = JSON.parse(result);
+    updateBadge();
 });
 
-console.log(currentPeriod);
-if (currentPeriod.passing) {
-    let tmp = currentPeriod.name.split(",");
-    periodName = translateWithInsert(tmp[0], tmp[1]);
-} else {
-    periodName = translate(currentPeriod.name);
-}
-timeLeft = currentPeriod.end.diff(dayjs(), "minutes") + 1;
+function updateBadge() {
+    getSchedule(dayjs()).forEach((p) => {
+        if (isCurrent(p)) {
+            currentPeriod = p;
+        }
+    });
 
-console.log("Name: " + periodName);
-console.log("Time Left: " + timeLeft);
+    console.log(currentPeriod);
+    if (currentPeriod.passing) {
+        let tmp = currentPeriod.name.split(",");
+        periodName = translateWithInsert(tmp[0], tmp[1]);
+    } else {
+        periodName = translate(currentPeriod.name);
+    }
+    timeLeft = currentPeriod.end.diff(dayjs(), "minutes") + 1;
+
+    let remainingHours = Math.floor(timeLeft / 60);
+    // let remainingMinutes = timeLeft - (remainingHours * 60);
+
+    // Set the extension tooltip to current period name
+    chrome.action.setTitle({ title: periodName })
+
+    if (remainingHours >= 2) {
+        // green
+        chrome.action.setBadgeBackgroundColor({ color: [39, 174, 96, 255] });
+        chrome.action.setBadgeText({ text: String(remainingHours + 'h') });
+    }
+    else {
+        if (timeLeft <= 5) {
+            // red
+            chrome.action.setBadgeBackgroundColor({ color: [192, 57, 43, 255] });
+            chrome.action.setBadgeText({ text: String(timeLeft) });
+        }
+        else if (timeLeft <= 10) {
+            // yellow
+            chrome.action.setBadgeBackgroundColor({ color: [243, 156, 18, 255] });
+            chrome.action.setBadgeText({ text: String(timeLeft) });
+        }
+        else {
+            // green
+            chrome.action.setBadgeBackgroundColor({ color: [39, 174, 96, 255] });
+            chrome.action.setBadgeText({ text: String(timeLeft) });
+        }
+    }
+
+return;
+}
 
 function isCurrent(period) {
-    return dayjs().isBetween(period.start, period.end)
+    return dayjs().isBetween(period.start, period.end);
 }
 
 function getSchedule(date) {
