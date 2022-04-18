@@ -25,7 +25,6 @@ async function getStorage() {
 }
 
 
-var languageJSON = { "ENGLISH": "English", "SPANISH": "Español", "GERMAN": "Deutsch", "FRENCH": "Français", "NOW": "NOW", "CALENDAR": "CALENDAR", "SETTINGS": "SETTINGS", "CALENDAR_TITLE": "Calendar", "SETTINGS_TITLE": "App Settings", "MORNING": "Good Morning.", "AFTERNOON": "Good Afternoon.", "EVENING": "Good Evening.", "TODAY_IS": "Today is {} schedule.", "HOUR_ABBREVIATION": "hr.", "MINUTE_ABBREVIATION": "min.", "PERIOD_NAME": "Period", "PERIOD_START": "Start", "PERIOD_END": "End", "BEFORE_SCHOOL": "Before School", "AFTER_SCHOOL": "After School", "PERIOD_0": "Period 0", "PERIOD_1": "Period 1", "PERIOD_2": "Period 2", "PERIOD_3": "Period 3", "PERIOD_4": "Period 4", "PERIOD_5": "Period 5", "PERIOD_6": "Period 6", "STEP_ODD": "STEP (odd)", "STEP_EVEN": "STEP (even)", "ASSEMBLY": "Assembly", "PASSING_BEFORE": "Passing before {}", "BREAK": "Break", "LUNCH": "Lunch", "REGULAR": "Regular", "BLOCK_ODD": "Block (odd)", "BLOCK_EVEN": "Block (even)", "NONE": "No School", "MINIMUM": "Half Day", "SUMMER_BREAK": "Summer Break", "WINTER_BREAK": "Winter Break", "SPRING_BREAK": "Spring Break", "FALL_BREAK": "Thanksgiving Break", "UNITL_END": " until period ends", "PERCENT_COMPLETED": "({}% completed)", "SETTINGS_NOTIFICATION_TITLE": "Notifications", "SETTINGS_NOTIFICATION_DESC": "Enable notifications (Experimental)", "SETTINGS_ANIMATIONS_TITLE": "Animations", "SETTINGS_ANIMATIONS_DESC": "Enable animations (Experimental)", "SETTINGS_EXTRA_PERIODS_TITLE": "Extra Periods", "SETTINGS_EXTRA_PERIODS_DESC": "Displays passing periods in the schedule", "SETTINGS_SIXTH_PERIOD_TITLE": "Sixth Period", "SETTINGS_SIXTH_PERIOD_DESC": "Shows the sixth period in the schedule", "SETTINGS_ZERO_PERIOD_TITLE": "Zero Period", "SETTINGS_ZERO_PERIOD_DESC": "Shows zero period in the schedule", "SETTINGS_TWENTY_FOUR_HOUR_TITLE": "24hr Clock", "SETTINGS_TWENTY_FOUR_HOUR_DESC": "Displays 24 hour time", "SETTINGS_AM_PM_TITLE": "AM / PM", "SETTINGS_AM_PM_DESC": "Shows AM and PM on the times", "SETTINGS_INLINE_DETAILS_TITLE": "Inline Period Details", "SETTINGS_INLINE_DETAILS_DESC": "Shows the period details in the period list on small screens", "SETTINGS_SHOW_WEEKENDS_TITLE": "Weekends", "SETTINGS_SHOW_WEEKENDS_DESC": "Shows the weekends on the calendar", "SETTINGS_COLOR_THEME_TITLE": "Color Theme", "SETTINGS_COLOR_THEME_DESC": "Changes the background color", "SETTINGS_GRADE_LEVEL_TITLE": "Grade Level", "SETTINGS_GRADE_LEVEL_DESC": "Changes the grade level for the schedule", "SETTINGS_LANGUAGE_TITLE": "Language", "SETTINGS_LANGUAGE_DESC": "Change your language", "TRUE": "True", "FALSE": "False", "YES": "Yes", "NO": "No", "ON": "On", "OFF": "Off", "GRADE_7": "7th Grade", "GRADE_8": "8th Grade", "GRADE_9": "9th Grade", "GRADE_10": "10th Grade", "GRADE_11": "11th Grade", "GRADE_12": "12th Grade", "JANUARY": "January", "FEBURARY": "February", "MARCH": "March", "APRIL": "April", "MAY": "May", "JUNE": "June", "JULY": "July", "AUGUST": "August", "SEPTEMBER": "September", "OCTOBER": "October", "NOVEMBER": "November", "DECEMBER": "December", "version": 19.6, "language": "ENGLISH" };
 var customNamesJSON = { "NONE": "Custom Name" };
 
 var currentPeriod;
@@ -33,19 +32,24 @@ var periodName;
 var timeLeft;
 
 var scheduleJSON;
+var languageJSON;
 var settings;
 
 
 
-fetch("https://betago.lciteam.club/schedule.json")
-.then(response => response.json())
-.then(data => {
-    scheduleJSON = data;
-    console.log(scheduleJSON);
-    getStorage().then(result => {
-        settings = JSON.parse(result);
-        updateBadge();
-    });
+fetch("https://betago.lciteam.club/languages.json")
+    .then(response => response.json())
+    .then(data => {
+        languageJSON = data;
+        fetch("https://betago.lciteam.club/schedule.json")
+            .then(response => response.json())
+            .then(data => {
+                scheduleJSON = data;
+                getStorage().then(result => {
+                    settings = JSON.parse(result);
+                    updateBadge();
+                });
+            });
 });
 
 function updateBadge() {
@@ -93,7 +97,7 @@ function updateBadge() {
         }
     }
 
-return;
+    return;
 }
 
 function isCurrent(period) {
