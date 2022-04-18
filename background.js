@@ -20,8 +20,8 @@ const readStorage = async (settingsJSON) => {
     });
 };
 
-async function getStorage() {
-    return await readStorage('settingsJSON');
+async function getStorage(key) {
+    return await readStorage(key);
 }
 
 
@@ -35,8 +35,20 @@ var scheduleJSON;
 var languageJSON;
 var settings;
 
+Promise.all([
+    fetch("https://betago.lciteam.club/schedule.json").then(response => response.json()),
+    fetch("https://betago.lciteam.club/languages.json").then(response => response.json()),
+    getStorage("settingsJSON")
+]).then(result => {
+    scheduleJSON = result[0];
+    languageJSON = result[1];
+    settings = JSON.parse(result[2]);
+
+    updateBadge();
+})
 
 
+/*
 fetch("https://betago.lciteam.club/languages.json")
     .then(response => response.json())
     .then(data => {
@@ -51,6 +63,8 @@ fetch("https://betago.lciteam.club/languages.json")
                 });
             });
 });
+*/
+
 
 function updateBadge() {
     getSchedule(dayjs()).forEach((p) => {
