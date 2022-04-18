@@ -25,7 +25,6 @@ async function getStorage(key) {
 }
 
 
-var customNamesJSON = { "NONE": "Custom Name" };
 
 var currentPeriod;
 var periodName;
@@ -34,15 +33,18 @@ var timeLeft;
 var scheduleJSON;
 var languageJSON;
 var settings;
+var customNamesJSON;
 
 Promise.all([
     fetch("https://betago.lciteam.club/schedule.json").then(response => response.json()),
     fetch("https://betago.lciteam.club/languages.json").then(response => response.json()),
-    getStorage("settingsJSON")
+    getStorage("settingsJSON"),
+    getStorage("customNamesJSON")
 ]).then(result => {
     scheduleJSON = result[0];
     languageJSON = result[1];
     settings = JSON.parse(result[2]);
+    customNamesJSON = JSON.parse(result[3]);
 
     updateBadge();
 })
