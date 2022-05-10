@@ -46,8 +46,8 @@ setInterval(updateBadge, 5000);
 
 function fetchData() {
     Promise.all([
-        fetch("http://127.0.0.1:5500/schedule.json").then((response) => response.json(), () => null),
-        fetch("http://127.0.0.1:5500/languages.json").then((response) => response.json(), () => null),
+        fetch("https://betago.lciteam.club/schedule.json").then((response) => response.json(), () => null),
+        fetch("https://betago.lciteam.club/languages.json").then((response) => response.json(), () => null),
     ]).then(result => {
         if(result[0] != null) {
             chrome.storage.local.set({
