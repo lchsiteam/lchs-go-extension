@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "LCHS Go (beta)",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "Extension version of betago.lciteam.club.",
     "icons": {
     },
