@@ -8,8 +8,7 @@
     "action": {
         "default_title": "LCHS Go (beta)",
         "default_popup": "popup.html",
-        "default_icon": {
-        }
+        "default_icon": "icon.png"
     },
     "background": {
         "service_worker": "background.js",
