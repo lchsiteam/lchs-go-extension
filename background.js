@@ -154,6 +154,8 @@ function getSchedule(date) {
             scheduleType = "SPRING_BREAK";
         } else if (inRange(date, "FALL_BREAK")) {
             scheduleType = "FALL_BREAK";
+        } else if(inRange(date, "PILOT_SCHEDULE")) {
+            scheduleType = scheduleJSON.pilot[date.day()];
         } else {
             scheduleType = schedule.defaults[date.day()];
         }
