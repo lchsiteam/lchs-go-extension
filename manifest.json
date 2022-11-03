@@ -23,6 +23,7 @@
     "homepage_url": "https://betago.lciteam.club",
     "offline_enabled": true,
     "permissions": [
-        "storage"
+        "storage",
+        "alarms"
     ]
 }
