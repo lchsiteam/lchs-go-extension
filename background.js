@@ -39,25 +39,27 @@ var language;
 var settings;
 var customNames;
 
-fetchData();
+function createAlarm() {
+  chrome.alarms.clearAll();
+  fetchData();
+  updateBadge();
 
-var calcDate = new Date();
-if (calcDate.getSeconds() > 0) {
-  calcDate.setMinutes(calcDate.getMinutes() + 1);
-  calcDate.setSeconds(0);
-}
-const alarmStart = Date.parse(calcDate);
-
-chrome.alarms.create(
-  name: String("updateAlarm"),
-  alarmInfo: { periodInMinutes: 1, when: alarmStart }
-);
-chrome.alarms.onAlarm.addListener(
-  callback: function (value) {
-    updateBadge();
-    fetchData();
+  var calcDate = new Date();
+  if (calcDate.getSeconds() > 0) {
+    calcDate.setMinutes(calcDate.getMinutes() + 1);
+    calcDate.setSeconds(0);
   }
-);
+  const alarmStart = Date.parse(calcDate);
+
+  chrome.alarms.create("updateAlarm", { periodInMinutes: 1, when: alarmStart });
+}
+
+createAlarm();
+
+chrome.alarms.onAlarm.addListener(function (alarm) {
+  updateBadge();
+  fetchData();
+});
 
 //setInterval(fetchData, 10000);
 //setInterval(updateBadge, 5000);
