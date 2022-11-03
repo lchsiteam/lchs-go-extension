@@ -39,11 +39,31 @@ var language;
 var settings;
 var customNames;
 
+function createAlarm() {
+  chrome.alarms.clearAll();
+  fetchData();
+  updateBadge();
 
-fetchData();
-setInterval(fetchData, 10000);
-setInterval(updateBadge, 5000);
+  var calcDate = new Date();
+  if (calcDate.getSeconds() > 0) {
+    calcDate.setMinutes(calcDate.getMinutes() + 1);
+    calcDate.setSeconds(0);
+  }
+  const alarmStart = Date.parse(calcDate);
 
+  chrome.alarms.create("updateAlarm", { periodInMinutes: 1, when: alarmStart });
+}
+
+createAlarm();
+
+chrome.alarms.onAlarm.addListener(function (alarm) {
+  updateBadge();
+  fetchData();
+});
+
+//setInterval(fetchData, 10000);
+//setInterval(updateBadge, 5000);
+    
 function fetchData() {
     Promise.all([
         fetch("https://betago.lciteam.club/schedule.json").then((response) => response.json(), () => null),
