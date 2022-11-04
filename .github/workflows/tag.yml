@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-        cache: npm
     - run: ls
     - name: Submit
       run: cd lchs-go-extension && npx chrome-webstore-upload-cli@2 upload --auto-publish
