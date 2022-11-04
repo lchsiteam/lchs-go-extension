@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: ls
     - name: Submit
       run: npx chrome-webstore-upload-cli@2 upload --auto-publish
       env:
