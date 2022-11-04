@@ -17,6 +17,7 @@
     "content_scripts": [
         {
             "matches": ["https://betago.lciteam.club/*"],
+            "all_frames": true,
             "js": ["extractData.js"]
         }
     ],
