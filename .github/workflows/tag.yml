@@ -1,0 +1,19 @@
+name: Upload Tagged Release to Chrome Web Store
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Submit
+      run: npx chrome-webstore-upload-cli@2 upload --auto-publish
+      env:
+        EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
