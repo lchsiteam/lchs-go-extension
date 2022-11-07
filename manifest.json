@@ -4,6 +4,10 @@
     "version": "0.0.3",
     "description": "Extension version of betago.lciteam.club.",
     "icons": {
+        "16": "icon16.png",
+        "32": "icon32.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
     },
     "action": {
         "default_title": "LCHS Go (beta)",
