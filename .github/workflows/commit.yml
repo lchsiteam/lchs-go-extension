@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Pack Extension
-      run: chromium --pack-extension="$PWD"
+      run: chromium --pack-extension="."
     - name: Zip Extension
       run: zip -x *.crx -r lchs-go-extension.zip .
     - run: ls
