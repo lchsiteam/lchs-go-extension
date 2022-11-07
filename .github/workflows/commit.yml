@@ -14,11 +14,14 @@ jobs:
       run: chromium --pack-extension="$PWD"
     - name: Zip Extension
       run: zip -x *.crx -r lchs-go-extension.zip .
+    - run: ls
     - name: Upload Packed Extension
       uses: actions/upload-artifact@master
       with:
+        name: crx
         path: ./*.crx
     - name: Upload Zipped Extension
       uses: actions/upload-artifact@master
       with:
+        name: zip
         path: ./lchs-go-extension.zip
