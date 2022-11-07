@@ -11,9 +11,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Pack Extension
-      run: chromium --pack-extension=$PWD
+      run: chromium --pack-extension=${GITHUB_WORKSPACE}
     - name: Zip Extension
-      run: zip -x *.crx -r lchs-go-extension.zip .
+      run: zip -x *.crx -r lchs-go-extension.zip ${GITHUB_WORKSPACE}
     - run: ls
     - name: Upload Packed Extension
       uses: actions/upload-artifact@master
