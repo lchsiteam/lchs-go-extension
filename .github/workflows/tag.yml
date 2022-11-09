@@ -10,10 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Submit
+    - name: Submit to Chrome Web Store
       run: npx chrome-webstore-upload-cli@2 upload --auto-publish
       env:
         EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+    - name: Pack Extension
+      run: chromium --pack-extension=${GITHUB_WORKSPACE} && mv ../*.crx .
+    - name: Zip Extension
+      run: zip -x *.crx -r lchs-go-extension.zip ${GITHUB_WORKSPACE}
+    - name: Publish Tagged Release
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: |
+          ./*.zip
+          ./*.crx
