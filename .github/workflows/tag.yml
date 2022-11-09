@@ -1,4 +1,4 @@
-name: Upload Tagged Release to Chrome Web Store
+name: Release Tagged Build
 
 on:
   push:
