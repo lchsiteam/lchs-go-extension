@@ -289,10 +289,10 @@ function translate(translateText) {
     if (customNames[translateText] != null) {
         return customNames[translateText];
     } else {
-        if (language[settings.json][translateText] == null) {
+        if (language[settings.language][translateText] == null) {
             return translateText;
         } else {
-            return language[settings.json][translateText];
+            return language[settings.language][translateText];
         }
     }
 }
