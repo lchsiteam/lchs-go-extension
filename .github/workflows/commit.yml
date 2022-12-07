@@ -11,16 +11,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Pack Extension
-      run: chromium --pack-extension=${GITHUB_WORKSPACE} && mv ../*.crx .
-    - name: Zip Extension
-      run: zip -x *.crx -r lchs-go-extension.zip ${GITHUB_WORKSPACE}
+      run: chromium --pack-extension=$(pwd) && mv ../*.crx .
     - name: Upload Packed Extension
       uses: actions/upload-artifact@master
       with:
         name: crx
         path: ./*.crx
-    - name: Upload Zipped Extension
-      uses: actions/upload-artifact@master
-      with:
-        name: zip
-        path: ./lchs-go-extension.zip
