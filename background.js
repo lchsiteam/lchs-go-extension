@@ -114,7 +114,7 @@ function updateBadge() {
 
         if (currentPeriod.passing) {
             let tmp = currentPeriod.name.split(",");
-            periodName = translateWithInsert(tmp[0], tmp[1]);
+            periodName = translateWithInsert(tmp[0], translate(tmp[1]));
         } else {
             periodName = translate(currentPeriod.name);
         }
