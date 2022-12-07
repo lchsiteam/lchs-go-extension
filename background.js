@@ -57,8 +57,8 @@ function createAlarm() {
 createAlarm();
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
-  updateBadge();
   fetchData();
+  updateBadge();
 });
 
 //setInterval(fetchData, 10000);
