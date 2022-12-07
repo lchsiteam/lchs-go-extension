@@ -18,9 +18,9 @@ jobs:
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
     - name: Pack Extension
-      run: chromium --pack-extension=${GITHUB_WORKSPACE} && mv ../*.crx .
+      run: chromium --pack-extension=$(pwd) && mv ../*.crx .
     - name: Zip Extension
-      run: zip -x *.crx -r lchs-go-extension.zip ${GITHUB_WORKSPACE}
+      run: zip -x *.crx -r lchs-go-extension.zip $(pwd)
     - name: Publish Tagged Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
