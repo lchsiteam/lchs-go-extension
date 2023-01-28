@@ -166,22 +166,14 @@ function getSchedule(date) {
     } else if (Object.keys(schedule.overrides[settings.grade]).includes(date.format("MM/DD/YYYY"))) {
         scheduleType = schedule.overrides[settings.grade][date.format("MM/DD/YYYY")];
     } else { // Check if today is in a range
-        if (inRange(date, "SUMMER_BREAK")) {
-            scheduleType = "SUMMER_BREAK";
-        } else if (inRange(date, "WINTER_BREAK")) {
-            scheduleType = "WINTER_BREAK";
-        } else if (inRange(date, "SPRING_BREAK")) {
-            scheduleType = "SPRING_BREAK";
-        } else if (inRange(date, "FALL_BREAK")) {
-            scheduleType = "FALL_BREAK";
-        } else if(inRange(date, "PILOT_SCHEDULE")) {
-            scheduleType = scheduleJSON.pilot[date.day()];
+        var isBreak = inBreak(date);
+        var isCustomWeek = inCustomWeek(date);
+        if (isBreak) {
+            scheduleType = isBreak;
+        } else if (isCustomWeek) {
+            scheduleType = scheduleJSON.customWeeks[isCustomWeek][date.day()];
         } else {
             scheduleType = schedule.defaults[date.day()];
-        }
-        if (inRange(date, "BLOCK_SWITCH")) {
-            if (scheduleType == "BLOCK_EVEN") { scheduleType = "BLOCK_ODD"; }
-            else if (scheduleType == "BLOCK_ODD") { scheduleType = "BLOCK_EVEN"; }
         }
     }
 
@@ -273,9 +265,28 @@ function getSchedule(date) {
     return localJSON;
 }
 
-// Function - Check if a date is in a date from the schedule.json
-function inRange(date, range) {
-    return date.startOf().add(1, 'hour').isBetween(dayjs(schedule.dateRanges[range][0], "MM/DD/YYYY").startOf('day'), dayjs(schedule.dateRanges[range][1], "MM/DD/YYYY").endOf('day'));
+// Function - Check if a date is in a break from the schedule.json and get that break if so
+function inBreak(date) {
+  var breakType = false;
+  for (var range in scheduleJSON.dateRanges.breaks) {
+    if (date.startOf().add(1, 'hour').isBetween(dayjs(scheduleJSON.dateRanges.breaks[range][0], "MM/DD/YYYY").startOf('day'), dayjs(scheduleJSON.dateRanges.breaks[range][1], "MM/DD/YYYY").endOf('day'))) {
+      breakType = range;
+      break;
+    }
+  }
+  return breakType;
+}
+
+// Function - Check if a date is in a custom week from the schedule.json and get that week if so
+function inCustomWeek(date) {
+  var weekType = false;
+  for (var range in scheduleJSON.dateRanges.customWeeks) {
+    if (date.startOf().add(1, 'hour').isBetween(dayjs(scheduleJSON.dateRanges.customWeeks[range][0], "MM/DD/YYYY").startOf('day'), dayjs(scheduleJSON.dateRanges.customWeeks[range][1], "MM/DD/YYYY").endOf('day'))) {
+      weekType = range;
+      break;
+    }
+  }
+  return weekType;
 }
 
 function getEvent(date) {
