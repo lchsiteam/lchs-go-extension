@@ -178,7 +178,7 @@ function getSchedule(date) {
     }
 
     // Add the periods and passing periods the json
-    if (scheduleType != "NONE" && !scheduleType.includes("BREAK")) {
+    if (scheduleType != "NONE" && !Object.keys(scheduleJSON.dateRanges.breaks).includes(scheduleType)) {
         var previousEnd;
         switch (settings.grade) {
             case "GRADE_7":
