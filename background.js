@@ -327,10 +327,10 @@ export function sendNotification(period, timeLeft) {
         nextPeriod = p;
     }});
     if (nextPeriod && !nextPeriod.passing && timeLeft == parseInt(settings.notificationStart)) { // period start notif
-      chrome.notifications.create(options: { type: "basic", title: "LCHS Go", message: translate(nextPeriod.name) + translateWithInsert("NOTIFY_START", translate(settings.notificationStart)), iconUrl: "/icon.png" });
+      chrome.notifications.create("", { type: "basic", title: "LCHS Go", message: translate(nextPeriod.name) + translateWithInsert("NOTIFY_START", translate(settings.notificationStart)), iconUrl: "/icon.png" });
     }
     else if (!period.passing && timeLeft == parseInt(settings.notificationEnd)) { // period end notif
-      chrome.notifications.create(options: { type: "basic", title: "LCHS Go", message: translate(period.name) + translateWithInsert("NOTIFY_END", translate(settings.notificationEnd)), iconUrl: "/icon.png" });
+      chrome.notifications.create("", { type: "basic", title: "LCHS Go", message: translate(period.name) + translateWithInsert("NOTIFY_END", translate(settings.notificationEnd)), iconUrl: "/icon.png" });
     }
   }
 }
