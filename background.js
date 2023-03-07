@@ -103,7 +103,6 @@ function updateBadge() {
             }
         }
 
-
         getSchedule(dayjs()).forEach((p) => {
             if (isCurrent(p)) {
                 currentPeriod = p;
@@ -316,4 +315,21 @@ function translateWithInsert(translateText, insertString) {
         return translate(translateText);
     }
     return returnText.slice(0, index) + insertString + returnText.slice(index + 2);
+}
+
+// Notify the user before period starts or ends
+export function sendNotification(period, timeLeft) {
+  if (settings.notificationToggle) {
+    var nextPeriod = null;
+    getSchedule(dayjs()).forEach((p) => {
+      if(p.getStart() == period.getEnd()) {
+        nextPeriod = p;
+    }});
+    if (nextPeriod && !nextPeriod.passing && nextPeriod.isVisible() && timeLeft == parseInt(settings.notificationStart)) { // period start notif
+      const notification = new Notification("LCHS Go", { body: nextPeriod.getName() + translateWithInsert("NOTIFY_START", translate(settings.notificationStart)), icon: "/icon.png" } );
+    }
+    else if (!period.passing && period.isVisible() && timeLeft == parseInt(settings.notificationEnd)) { // period end notif
+      const notification = new Notification("LCHS Go", { body: period.getName() + translateWithInsert("NOTIFY_END", translate(settings.notificationEnd)), icon: "/icon.png" } );
+    }
+  }
 }
