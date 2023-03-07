@@ -323,13 +323,13 @@ export function sendNotification(period, timeLeft) {
   if (settings.notificationToggle) {
     var nextPeriod = null;
     getSchedule(dayjs()).forEach((p) => {
-      if(p.getStart() == period.getEnd()) {
+      if(p.start == period.end) {
         nextPeriod = p;
     }});
-    if (nextPeriod && !nextPeriod.passing && nextPeriod.isVisible() && timeLeft == parseInt(settings.notificationStart)) { // period start notif
+    if (nextPeriod && !nextPeriod.passing && timeLeft == parseInt(settings.notificationStart)) { // period start notif
       const notification = new Notification("LCHS Go", { body: nextPeriod.getName() + translateWithInsert("NOTIFY_START", translate(settings.notificationStart)), icon: "/icon.png" } );
     }
-    else if (!period.passing && period.isVisible() && timeLeft == parseInt(settings.notificationEnd)) { // period end notif
+    else if (!period.passing && timeLeft == parseInt(settings.notificationEnd)) { // period end notif
       const notification = new Notification("LCHS Go", { body: period.getName() + translateWithInsert("NOTIFY_END", translate(settings.notificationEnd)), icon: "/icon.png" } );
     }
   }
