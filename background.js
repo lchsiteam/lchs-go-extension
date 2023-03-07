@@ -147,6 +147,7 @@ function updateBadge() {
                 chrome.action.setBadgeText({ text: String(timeLeft) });
             }
         }
+        sendNotification(currentPeriod, timeLeft);
 })
 }
 
