@@ -11,14 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Pack Extension
-      run: chromium --pack-extension=$(pwd) && mv ../*.crx .
+      run: chromium --pack-extension=$(pwd)
     - name: Publish Tagged Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         files: |
-          ./*.crx
+          ../*.crx
     - name: Submit to Chrome Web Store
       run: npx chrome-webstore-upload-cli@2 upload --auto-publish
       env:
