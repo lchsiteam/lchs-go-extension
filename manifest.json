@@ -29,6 +29,7 @@
     "offline_enabled": true,
     "permissions": [
         "storage",
-        "alarms"
+        "alarms",
+        "notifications"
     ]
 }
