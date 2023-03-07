@@ -13,7 +13,7 @@ const readStorage = async (key) => {
         chrome.storage.local.get([key], function (value) {
             if (value[key] === undefined) {
                 if(key == "settingsJSON") {
-                    value[key] = '{"setting":"settings","showExtraPeriods":false,"sixthEnabled":true,"zeroEnabled":true,"twentyFourHour":false,"showAMPM":false,"inlinePeriodDetails":true,"colorTheme":3,"grade":"GRADE_9","language":"ENGLISH",notificationToggle:false,notificationStart:"3_MIN",notificationEnd:"2_MIN"}';
+                    value[key] = '{"setting":"settings","showExtraPeriods":false,"sixthEnabled":true,"zeroEnabled":true,"twentyFourHour":false,"showAMPM":false,"inlinePeriodDetails":true,"colorTheme":3,"grade":"GRADE_9","language":"ENGLISH","notificationToggle":false,"notificationStart":"3_MIN","notificationEnd":"2_MIN"}';
                 } else if(key == "customNamesJSON") {
                     value[key] = '{}';
                 }
