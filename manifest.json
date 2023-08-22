@@ -1,5 +1,5 @@
 {
-    "manifeqst_version": 3,
+    "manifest_version": 3,
     "name": "LCHS Go",
     "version": "0.3.1",
     "description": "Extension version of betago.lciteam.club.",
