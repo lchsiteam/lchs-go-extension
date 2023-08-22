@@ -1,7 +1,7 @@
 {
-    "manifest_version": 3,
-    "name": "LCHS Go (beta)",
-    "version": "0.3.0",
+    "manifeqst_version": 3,
+    "name": "LCHS Go",
+    "version": "0.3.1",
     "description": "Extension version of betago.lciteam.club.",
     "icons": {
         "16": "icon16.png",
@@ -10,7 +10,7 @@
         "128": "icon128.png"
     },
     "action": {
-        "default_title": "LCHS Go (beta)",
+        "default_title": "LCHS Go",
         "default_popup": "popup.html",
         "default_icon": "icon.png"
     },
@@ -20,7 +20,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://betago.lciteam.club/*"],
+            "matches": ["https://betago.lciteam.club/*", "https://go.lciteam.club/*"],
             "all_frames": true,
             "js": ["extractData.js"]
         }
