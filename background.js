@@ -66,8 +66,8 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
     
 function fetchData() {
     Promise.all([
-        fetch("https://betago.lciteam.club/schedule.json").then((response) => response.json(), () => null),
-        fetch("https://betago.lciteam.club/languages.json").then((response) => response.json(), () => null),
+        fetch("https://go.lciteam.club/schedule.json").then((response) => response.json(), () => null),
+        fetch("https://go.lciteam.club/languages.json").then((response) => response.json(), () => null),
     ]).then(result => {
         if(result[0] != null) {
             chrome.storage.local.set({
