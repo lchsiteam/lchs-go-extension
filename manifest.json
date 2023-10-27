@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "LCHS Go",
-    "version": "0.3.1",
+    "version": "1.0.0",
     "description": "Extension version of go.lciteam.club.",
     "icons": {
         "16": "icon16.png",
